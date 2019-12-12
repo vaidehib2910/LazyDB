@@ -16,13 +16,13 @@ from pathlib import Path
 import shutil
 import tarfile
 
-
 server_url = settings.server_url
 export_file_path = settings.export_file_path
 mongo_client = settings.mongo_client
 mongo_status = settings.mongodb_status
 logging.basicConfig(filename=settings.logging_file_path, level=logging.DEBUG,
                     format='%(asctime)s %(levelname)s %(message)s')
+
 
 def save_and_export(email, url, db_type):
     if mongo_status:
@@ -133,24 +133,23 @@ def connectDBtoDjango(dbname, db_type):
 
 def exportDB(dbname, tables):
     logging.debug('Method:exportDB, Args:[dbname=%s], Message: Export DB', dbname)
+    logging.debug('PATH:%s', export_file_path)
     for t in tables:
-            p1 = subprocess.Popen(
-                ["mongodump", "--db", dbname, "-c", t, "-o" + export_file_path])
-            p1.wait()
-            p1.communicate()
-    path = os.getcwd() + "/" + export_file_path + dbname
+        p1 = subprocess.Popen(
+            ["mongodump", "--db", dbname, "-c", t, "-o" + "C:\\Users\\vgb29\\Documents\\LazyDB\\dbcreater\\edbs\\"])
+        p1.wait()
+        p1.communicate()
+    path = os.path.join(export_file_path, dbname)
+    logging.debug('PATH:%s', path)
     with tarfile.open(path + ".tgz", "w:gz") as tar:
-            for name in os.listdir(path):
-                tar.add(path + '/' + name)
-
-
-
+        for name in os.listdir(path):
+            tar.add(path + '/' + name)
 
 
 def deleteDB(dbname, db_type):
     logging.debug('Method:deleteDB, Args:[dbname=%s], Message: Delete DB', dbname)
     mongo_client.drop_database(dbname)
-    del settings.DATABASES[dbname+db_type]
+    del settings.DATABASES[dbname + db_type]
 
 
 def getDynamicType(type):

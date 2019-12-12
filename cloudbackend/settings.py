@@ -41,9 +41,9 @@ if PRODUCTION:
     file_downloads_path = "var/www/html/LazyDB/filedownloads/"
 else:
     server_url = "http://127.0.0.1:8000"
-    export_file_path = "dbcreater/edbs/"
+    export_file_path = os.path.join("C:", r'\Users', "vgb29", "Documents", "LazyDB", "dbcreater", "edbs")
     logging_file_path = "backend.log"
-    file_downloads_path = "filedownloads/"
+    file_downloads_path = os.path.join("C:", r'\Users', "vgb29", "Documents", "LazyDB", "filedownloads")
 
 mongo_client = pymongo.MongoClient()
 try:
